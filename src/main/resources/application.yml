@@ -1,0 +1,79 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  datasource:
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+    kafka:
+      bootstrap-servers: localhost:9092
+      producer:
+        bootstrap-servers: localhost:9092
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+        properties:
+          spring.json.trusted.packages: "*"
+
+      consumer:
+        bootstrap-servers: localhost:9092
+        group-id: message-sender-group
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+        properties:
+          spring.json.trusted.packages: "*"
+
+
+    mail:
+      host: localhost
+      port: 1025
+      username: hello
+      password: hello
+
+      properties:
+        mail:
+          smtp:
+            ssl:
+              trust: "*"
+            auth: true
+            starttls:
+              enable: true
+            connectiontimeout: 5000
+            timeout: 3000
+            writetimeout: 5000
+
+
+
+#  mail:
+#    host: localhost
+#    port: 1025
+#    username: hello
+#    password: hello
+#
+#    properties:
+#      mail:
+#        smtp:
+#          ssl:
+#            trust: "*"
+#          auth: true
+#          starttls:
+#            enable: true
+#          connectiontimeout: 5000
+#          timeout: 3000
+#          writetimeout: 5000
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
